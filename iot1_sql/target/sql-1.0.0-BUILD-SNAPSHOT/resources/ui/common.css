@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+body {
+  padding-top: 50px;
+}
+.container-view{
+  max-width: 530px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.mastfoot {
+   width: 600px;
+    position: fixed;
+    bottom: 0;
+    left: 50%; 
+    text-align: center;
+    margin-left: -300px;
+    color:red;
+}
+ul[class='pagination']>li>a:hover{
+	background-color:white;
+	color:red;
+	cursor:pointer;
+}

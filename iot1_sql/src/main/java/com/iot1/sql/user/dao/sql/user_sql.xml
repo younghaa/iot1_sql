@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
 
-<mapper namespace="userinfo">
+<mapper namespace="user">
 
 	<select id="SELECT_USER" parameterType="user" resultType="user">
 	  select 
@@ -25,7 +25,7 @@
 	  	and	userid = #{userId}
 	  </if>
 	  <if test="userNum!=0">
-	  	and	usernum = #{userNum}
+	  	and	usernum = #{userNum} 
 	  </if>
 	</select>	
 	<select id="SELECT_USER_LIST" parameterType="user" resultType="user">
