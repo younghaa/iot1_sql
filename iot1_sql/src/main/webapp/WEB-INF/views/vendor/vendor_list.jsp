@@ -29,7 +29,7 @@ name="grid" pageable="true" sortable="true" scrollable="true" height="450">
 <kendo:grid-column title="시간" field="viCretim"/>
 
 </kendo:grid-columns>
-<kendo:dataSource pageSize="20">
+<kendo:dataSource pageSize="20" batch="true">
 	<kendo:dataSource-transport>
 		<kendo:dataSource-transport-read url="${readUrl}" dataType="json" type="POST" contentType="application/json" />
 	</kendo:dataSource-transport>

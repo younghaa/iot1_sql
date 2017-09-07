@@ -3,11 +3,19 @@
 
 <mapper namespace="goods">
 	<select id="SELECT_GOODS" parameterType="goods" resultType="goods">
-		select ginum, giname,gidesc, vinum, gicredat,gicretim
+		select ginum, giname, gidesc, vinum, gicredat, gicretim
 		from goods_info
 		where 1=1
 		<if test="viNum!=0">
 			and vinum = #{viNum}
 		</if>
 	</select>
+<insert id="INSERT_GOODS" parameterType="goods">
+	INSERT INTO GOODS_INFO(giname,gidesc,vinum,gicredat,gicretim)
+	VALUES(${giName},${giDesc},${viNum},DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%H%i%s'))
+	</insert>
+<update id="UPDATE_GOODS" parameterType="goods">
+	<!-- UPDATE FROM GOODS_INFO
+	SET ginum="" -->
+</update>
 </mapper>

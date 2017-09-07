@@ -21,6 +21,25 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<GoodsInfo> getGoodsInfoList(GoodsInfo gi){
 		return gDao.selectGoodsInfoList(gi);
 	}
-
+	@Override
+	public int  insertGoodsInfo(GoodsInfo gi){
+		return gDao.insertGoodsInfo(gi);
+	}
+	@Override
+	public int insertGoodsInfoList(GoodsInfo[] giList){
+		int result = 0;
+		for(GoodsInfo gi : giList){
+			result += gDao.insertGoodsInfo(gi);
+		}
+		return result;
+	}
+	@Override
+	public int updateGoods(GoodsInfo gi) {
+		return gDao.updateGoodsInfo(gi);
+	}
+	@Override
+	public int deleteGoods(GoodsInfo gi) {
+		return gDao.deleteGoodsInfo(gi);
+	}
 
 }
