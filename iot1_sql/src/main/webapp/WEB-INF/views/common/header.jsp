@@ -127,8 +127,11 @@ var AjaxUtil = function (url, params, type, dataType){
             <li><a href="/user/user_info.jsp">유저정보가기</a></li>
             <li><a href="/role/role_select.jsp">권한정보가기</a></li>
             <li><a href="/user/logout">로그아웃</a></li>
-          </ul>
-          
+          </ul>          
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+
+    
+
+    
