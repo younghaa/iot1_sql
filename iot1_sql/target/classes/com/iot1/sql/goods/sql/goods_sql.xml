@@ -14,7 +14,7 @@
 	
 	<insert id="INSERT_GOODS" parameterType="goods" >
 		INSERT INTO GOODS_INFO(giname,gidesc, vinum, gicredat,gicretim)
-		values(#{giName},#{giDesc},#{viNum},DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%H%i%s'))
+		values(#{giName},#{giDesc},#{viNum},DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%H:%i:%s'))
 	</insert>
 	
 	<delete id="DELETE_GOODS" parameterType="goods" >
