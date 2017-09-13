@@ -16,14 +16,12 @@
     	<typeAlias alias= "dataBase" type="com.iot1.sql.db.dto.DataBase"/>
     	<typeAlias alias= "table" type="com.iot1.sql.db.dto.Table"/>
     	<typeAlias alias= "column" type="com.iot1.sql.db.dto.Column"/>
-
 	</typeAliases>
 	<mappers>
 		<mapper resource="com/iot1/sql/user/dao/sql/user_sql.xml" />
 		<mapper resource="com/iot1/sql/goods/sql/goods_sql.xml" />
 		<mapper resource="com/iot1/sql/vendor/sql/vendor_sql.xml" />
 		<mapper resource="com/iot1/sql/db/sql/db_sql.xml"/>
-
 	</mappers>
 </configuration>
 

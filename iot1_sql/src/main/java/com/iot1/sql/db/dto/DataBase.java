@@ -1,5 +1,8 @@
 package com.iot1.sql.db.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DataBase {
 	private String database;
 	private String tableName;

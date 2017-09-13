@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.iot1.sql.common.DataSourceFactory;
+import com.iot1.sql.db.dto.Column;
 import com.iot1.sql.db.dto.DBInfo;
 import com.iot1.sql.db.dto.DataBase;
 import com.iot1.sql.db.dto.Table;
@@ -18,14 +19,15 @@ import com.iot1.sql.db.dto.Table;
 public class DBDaoImpl extends SqlSessionDaoSupport implements DBDao{
 	@Autowired
 	DataSourceFactory dsf;
-	@Override
-	public DBInfo selectDBInfo(DBInfo di) {
-		return this.getSqlSession().selectOne("db.SELECT_DB", di);
-	}
-
+	
 	@Override
 	public List<DBInfo> selectDBInfoList(DBInfo di) {
 		return this.getSqlSession().selectList("db.SELECT_DB", di);
+	}
+
+	@Override
+	public DBInfo selectDBInfo(DBInfo di) {
+		return this.getSqlSession().selectOne("db.SELECT_DB", di);
 	}
 
 	@Override
@@ -48,7 +50,13 @@ public class DBDaoImpl extends SqlSessionDaoSupport implements DBDao{
 
 	//TABLE SELECT
 	public List<Table> selectTableList(DataBase di) throws Exception{
+		dsf.getSqlSession().selectList("db.USE_DATABASE", di);
 		return dsf.getSqlSession().selectList("db.TABLE_SELECT",di);
+	}
+
+	@Override
+	public List<Column> selectTableInfo(Table table) throws Exception {
+		return dsf.getSqlSession().selectList("db.TABLE_INFO_SELECT", table);
 	}
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.iot1.sql.db.dto.DBInfo;
 import com.iot1.sql.db.dto.DataBase;
+import com.iot1.sql.db.dto.Table;
 import com.iot1.sql.db.service.DBService;
 
 @Controller
@@ -48,5 +49,14 @@ public class DBController {
 		}
 		return map;
 	}
-	
+	@RequestMapping(value="/db/table/info", method=RequestMethod.POST)
+	public @ResponseBody ModelMap getTableInfo(@RequestBody Table table, ModelMap map){
+		try{
+				map.put("tableList", ds.getTableInfo(table));
+				map.put("key", "tableList");
+		}catch(Exception e){
+			map.put("key", e.getMessage());
+		}
+		return map;
+	}
 }

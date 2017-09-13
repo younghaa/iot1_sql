@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DBInfo {
-
 	private int diNum;
 	private int uiNum;
 	private String dbTitle;
@@ -13,8 +12,7 @@ public class DBInfo {
 	private String id;
 	private String pwd;
 	private String port;
-	private String diverName;
-	
+	private String driverName;
 	public int getDiNum() {
 		return diNum;
 	}
@@ -63,15 +61,15 @@ public class DBInfo {
 	public void setPort(String port) {
 		this.port = port;
 	}
-	public String getDiverName() {
-		return diverName;
+	public String getDriverName() {
+		return driverName;
 	}
-	public void setDiverName(String diverName) {
-		this.diverName = diverName;
+	public void setDriverName(String driverName) {
+		this.driverName = driverName;
 	}
 	@Override
 	public String toString() {
-		return "DBInfo [diNum=" + diNum + ", uiNum=" + uiNum + ", dbTitle=" + dbTitle + ", dbUrl=" + dbUrl + ", dbms="
-				+ dbms + ", id=" + id + ", pwd=" + pwd + ", port=" + port + ", diverName=" + diverName + "]";
+		return "DbInfo [diNum=" + diNum + ", uiNum=" + uiNum + ", dbTitle=" + dbTitle + ", dbUrl=" + dbUrl + ", dbms="
+				+ dbms + ", id=" + id + ", pwd=" + pwd + ", port=" + port + ", driverName=" + driverName + "]";
 	}
 }

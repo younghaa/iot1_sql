@@ -20,13 +20,17 @@
        </if>
 	</select>
 	
-	<select id="TABLE_INFO_SELECT" parameterType="Map"  resultType="Map">
+	<select id="TABLE_INFO_SELECT" parameterType="table"  resultType="column">
 		select  column_name, data_type, character_maximum_length,is_nullable
 		 from INFORMATION_SCHEMA.columns 
 		where table_name=#{dbname}
 		and table_schema=database()
-		 order by ordinal_position;
+		 order by ordinal_position
+		 
 	</select>
 	
+	<select id="USE_DATABASE" parameterType="database">
+		use ${database}
+	</select>
 	
 </mapper>

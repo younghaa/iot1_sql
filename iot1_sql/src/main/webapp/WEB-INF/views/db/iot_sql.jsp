@@ -1,26 +1,87 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<c:url var="dbRUrl" value="/db/list/tree"/>
-<title>iot_sql</title>
+<%@ page session="false" %> 
+<c:set var="dbTreeJsp" value="/WEB-INF/views/db/db_treeview.jsp" />
+<c:set var="tableInfoJsp" value="/WEB-INF/views/db/table_info.jsp" />
+<c:set var="tabJsp" value="/WEB-INF/views/db/tab.jsp" />
+<c:url var="tableInfoUrl" value="/db/table/info" />
+
+<title>IOT SQL</title>
 </head>
 <script>
 var treeview;
 
 function onBound(){
-	treeview=$('#treeview').data('kendoTreeView');
+	treeview = $('#treeview').data('kendoTreeView');
+	$( "#query" ).keydown(function(e) {
+		var keyCode = e.keyCode || e.which;
+		if(e.ctrlKey && keyCode==120 && e.shiftKey){
+			var sql = this.value;
+			var cursor = this.selectionStart;
+			var startSql = sql.substr(0,cursor);
+			var startSap = startSql.lastIndexOf(";")
+			startSql = startSql.substr(startSap+1);
+			var endSql = sql.substr(cursor);
+			var endSap = endSql.indexOf(";");
+			if(endSap==-1) {
+				endSap=sql.length;
+			}
+			endSql = endSql.substr(0,endSap);
+			sql = startSql + endSql;
+			alert(sql);
+			alert(this.selectionStart);
+		}else if(e.ctrlKey && keyCode==120){
+			var t = this.value.substr(this.selectionStart, this.selectionEnd - this.selectionStart);
+			alert(t);
+		}else if(keyCode==120){
+			
+		}
+		
+	});
 }
-function treeSelect(e){
+
+function treeSelect(){
 	window.selectedNode = treeview.select();
-	   var data = treeview.dataItem(window.selectedNode);
-	   if(data.database && !data.hasChildren){
-	      var au = new AjaxUtil("db/table/list");
-	      var param = {};
-	      param["database"] = data.database;
-	      au.param = JSON.stringify(param);
-	      au.setCallbackSuccess(callbackForTreeItem2);
-	      au.send();
-	   }
+	var data = treeview.dataItem(window.selectedNode);
+	if(data.database && !data.hasChildren){
+		var au = new AjaxUtil("db/table/list");
+		var param = {};
+		param["database"] = data.database;
+		au.param = JSON.stringify(param);
+		au.setCallbackSuccess(callbackForTreeItem2);
+		au.send();
+	}else if(data.tableName){
+		var ki = new KendoItem(treeview, $("#tableInfoGrid"), "${tableInfoUrl}","tableName");
+		ki.send();
+	}
+}
+
+function callbackForTreeItem2(result){
+	if(result.error){
+		alert(result.error);
+		return;
+	}
+	for(var i=0, max=result.tableList.length;i<max;i++){
+		var table = result.tableList[i];
+		treeview.append({
+			tableName: table.tableName
+        }, treeview.select());
+	}
+}
+
+function callbackForTreeItem(result){
+	if(result.error){
+		alert(result.error);
+		return;
+	}
+	for(var i=0, max=result.databaseList.length;i<max;i++){
+		var database = result.databaseList[i];
+		treeview.append({
+			database: database.database
+        }, treeview.select());
+	}
+	$("#btnConnect").text("접속해제");
 }
 function toolbarEvent(e){
 	if($("#btnConnect").text()=="접속해제"){
@@ -30,22 +91,21 @@ function toolbarEvent(e){
 	}
 	var data = treeview.dataItem(window.selectedNode);
 	if(data && data.diNum){
-		var au = new AjaxUtil("/db/connecte");
+		//$('#treeview>.k-group>.k-item>.k-group').remove();
+		//treeview.dataSource.read();
+		var au = new AjaxUtil("db/connecte");
 		var param = {};
 		param["diNum"] = data.diNum;
 		au.param = JSON.stringify(param);
-		au.param = JSON.stringify(param);
-		au.setCallbackSucess(callbackForTreeItem);
+		au.setCallbackSuccess(callbackForTreeItem);
 		au.send();
-		}else{
-			alert("접속할 데이터베이스를 선택하시오");
-		}
+	}else{
+		alert("접속하실 데이터베이스를 선택해주세요");
+	}
 }
-
 </script>
-
-<br><p></p><br><p></p><br>
 <body>
+<c:import url="${menuUrl}"/> 
 <kendo:splitter name="vertical" orientation="vertical">
     <kendo:splitter-panes>
         <kendo:splitter-pane id="top-pane" collapsible="false">
@@ -55,29 +115,7 @@ function toolbarEvent(e){
 				        <kendo:splitter-pane id="left-pane" collapsible="true" size="220px">
 				            <kendo:splitter-pane-content >
 				                <div class="pane-content">
-					                <kendo:toolBar name="toolbar">
-										<kendo:toolBar-items>
-											<kendo:toolBar-item type="button" text="접속" id="btnConnect" click="toolbarEvent"></kendo:toolBar-item>
-										</kendo:toolBar-items>
-									</kendo:toolBar>
-									 <kendo:treeView name="treeview" dataTextField="<%= new String[]{\"dbTitle\", \"database\",\"tableName\"} %>" change="treeSelect"  
-									 dataBound="onBound">
-									     <kendo:dataSource>
-									         <kendo:dataSource-transport>
-									             <kendo:dataSource-transport-read url="${dbRUrl}" type="POST"  contentType="application/json"/>    
-									             <kendo:dataSource-transport-parameterMap>
-									             	<script>
-										              	function parameterMap(options,type) {
-										              		return JSON.stringify(options);
-										              	}
-									             	</script>
-									             </kendo:dataSource-transport-parameterMap>         
-									         </kendo:dataSource-transport>
-									         <kendo:dataSource-schema>
-									             <kendo:dataSource-schema-hierarchical-model id="dbTitle" hasChildren="hasDatabases"/>
-									         </kendo:dataSource-schema>
-									     </kendo:dataSource>
-									 </kendo:treeView>
+				                	<c:import url="${dbTreeJsp}"/>
                                 </div>
 				            </kendo:splitter-pane-content>
 				        </kendo:splitter-pane>
@@ -87,15 +125,14 @@ function toolbarEvent(e){
 				   					<kendo:splitter-panes>
 		       							<kendo:splitter-pane id="top-pane" collapsible="false" >
 							                <div class="pane-content">
-						                		<h3>Inner splitter / middle top pane</h3>
+						                		<c:import url="${tabJsp }"/>
 			                                </div>
 		       							</kendo:splitter-pane>
 		       							<kendo:splitter-pane id="middle-pane" collapsible="true" >
 							                <div class="pane-content">
-						                		<h3>Inner splitter / middle-middle pane</h3>
+						                		<c:import url="${tableInfoJsp}"/>
 			                                </div>
 		       							</kendo:splitter-pane>
-		       							
 	       							</kendo:splitter-panes>
        							</kendo:splitter>
 				            </kendo:splitter-pane-content>
@@ -119,7 +156,7 @@ function toolbarEvent(e){
         </kendo:splitter-pane>
     </kendo:splitter-panes>
 </kendo:splitter>
-
+</body>
 <style>
     #vertical {
         height: 580px;
@@ -170,6 +207,12 @@ function toolbarEvent(e){
     #content .demo-section input {
         width: 80%;
     }
+    .k-button >.k-toolbar-first-visible >.k-toolbar-last-visible{
+    	color:red;
+    }
+    a[class='k-link'], tr{ 
+		text-align: center;
+		color:blue;
+	}
 </style>
-</body>
 </html>

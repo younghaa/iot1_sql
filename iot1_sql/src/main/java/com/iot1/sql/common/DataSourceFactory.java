@@ -16,7 +16,7 @@ public class DataSourceFactory {
 	
 	private void setDataSource(DBInfo db){
 		bds = new BasicDataSource();
-		bds.setDriverClassName(db.getDiverName());
+		bds.setDriverClassName(db.getDriverName());
 		bds.setUrl(db.getDbUrl()+":"+db.getPort()+"/"+db.getDbms());
 		bds.setUsername(db.getId());
 		bds.setPassword(db.getPwd());

@@ -2,13 +2,25 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="kendo" uri="http://www.kendoui.com/jsp/tags"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%@ include file="/WEB-INF/views/goods/goods_list.jsp" %>
 <c:url var="dbRUrl" value="/db/list/tree" />
+<title>layout</title>
 <script>
 var treeview;
 function onBound(){
 	treeview = $('#treeview').data('kendoTreeView');
 }
 function onChange(e){
+	window.selectedNode = treeview.select();
+	   var data = treeview.dataItem(window.selectedNode);
+	   if(data.database && !data.hasChildren){
+	      var au = new AjaxUtil("db/table/list");
+	      var param = {};
+	      param["database"] = data.database;
+	      au.param = JSON.stringify(param);
+	      au.setCallbackSuccess(callbackForTreeItem2);
+	      au.send();
+	   }
 }
 function onSelect(e){
 	window.selectedNode = e.node;
