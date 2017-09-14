@@ -2,8 +2,12 @@ package com.iot1.sql.db.dao;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,40 @@ public class DBDaoImpl extends SqlSessionDaoSupport implements DBDao{
 	@Override
 	public List<Column> selectTableInfo(Table table) throws Exception {
 		return dsf.getSqlSession().selectList("db.TABLE_INFO_SELECT", table);
+	}
+
+	@Override
+	public Map<String, Object> runSql(Map<String, String> pm) throws Exception {
+		String sql = pm.get("sql");
+		sql = sql.trim();
+		Map<String,Object> map = new HashMap<String,Object>();
+		Statement statement = dsf.getSqlSession().getConnection().createStatement();
+		if(sql.indexOf("select")==0){
+			ResultSet resultSet = statement.executeQuery(sql);
+			ResultSetMetaData metadata = resultSet.getMetaData();
+			int columnCount = metadata.getColumnCount();
+			List<String> columns = new ArrayList<String>();
+				for (int i = 1; i<=columnCount;i++) {
+					String columnName = metadata.getColumnName(i);
+					columns.add(columnName);
+				}
+				List<Map<String,String>>list = new ArrayList<Map<String,String>>();
+				while(resultSet.next()){
+					Map<String,String> hm = new HashMap<String,String>();
+					for(String column : columns){
+						hm.put(column, resultSet.getString(column));
+				}
+					list.add(hm);
+			}
+				map.put("type", "select");
+				map.put("list", list);
+				map.put("columns", columns);
+		}else{
+			int result = statement.executeUpdate(sql);
+			map.put("type", "save");
+			map.put("row", result);
+		}
+		return map;
 	}
 
 }

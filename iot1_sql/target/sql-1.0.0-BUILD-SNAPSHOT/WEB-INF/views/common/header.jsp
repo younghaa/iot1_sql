@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
+<%@ include file="/WEB-INF/views/common/common.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<c:set var="pVar" value="1.3.2"/>
-<c:set var="rootPath" value="${pageContext.request.contextPath}"/>
-<c:set var="nowUrl" value="${pageContext.request.requestURI}"/>
 <script src="<c:url value='/resources/js/jquery.min.js' />"></script>
 <script src="<c:url value="/resources/js/jquery-ui-1.9.2.custom.js?version=${pVar}"/>"></script>
 <script src="<c:url value="/resources/js/jquery.fileupload.js?version=${pVar}"/>"></script>
@@ -17,8 +14,7 @@
 <script src="<c:url value="/resources/ui/common.js?version=${pVar}"/>"></script>
 <script src="<c:url value="/resources/ui/btsp3.7.7/js/bootstrap.min.js?version=${pVar}"/>"></script>
 <script src="<c:url value="/resources/ui/btsp3.7.7/js/bootstrap-table.js?version=${pVar}"/>"></script>
-<script src="<c:url value="/resources/ui/btsp3.7.7/js/bootstrap-table.js?version=${pVar}"/>"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
 <script src="<c:url value='/resources/js/kendo.all.min.js' />"></script>
 <script src="<c:url value='/resources/js/kendo.timezones.min.js' />"></script>
 <script src="<c:url value='/resources/shared/js/console.js'/>"></script>
@@ -35,10 +31,43 @@
 <link href="<c:url value='/resources/css/dataviz/kendo.dataviz.default.min.css'/>" rel="stylesheet" />
 <link href="<c:url value='/resources/shared/styles/examples-offline.css'/>" rel="stylesheet"/>
 <script>
+ 
 $(document).ready(function(){
 	var nowUrl = "${nowUrl}";
 	var obj = $("a[href='" + nowUrl + "']").parent().attr("class","active");
 })
+var KendoItem = function(obj, grid,url, keyStr){
+	var selectValue = obj.dataItem(obj.select())[keyStr];
+	this.key = keyStr;
+	this.param = {};
+	this.param[keyStr]=selectValue;
+	var gridObj = grid.data("kendoGrid");
+	gridObj.dataSource.transport.param = this.param;
+	var reload = function(options){
+        $.ajax({
+        	type : "post",
+			url : url,
+			dataType : "json",
+			data : JSON.stringify(this.param),
+		    beforeSend: function(xhr) {
+		        xhr.setRequestHeader("Content-Type", "application/json");
+		    },
+		    success : function(result){
+		    	if(result.key){
+		    		result = result[result.key];
+		    	}
+		    	options.success(result);
+			},
+			error : function(xhr){
+				alert(xhr.responseText);
+			}
+        });
+	}
+	this.send = function(){
+	    gridObj.dataSource.transport.read = reload;
+		gridObj.dataSource.read();
+	}
+}
 var JSException = function(msg){
 	alert(msg);
 	console.log(msg);
@@ -108,26 +137,3 @@ var AjaxUtil = function (url, params, type, dataType){
 }
 
 </script>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="${rootPath}/main.jsp">HOME</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/board/board_select.jsp">게시판가기</a></li>
-            <li><a href="/user/user_info.jsp">유저정보가기</a></li>
-            <li><a href="/role/role_select.jsp">권한정보가기</a></li>
-            <li><a href="/user/logout">로그아웃</a></li>
-          </ul>
-          
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>

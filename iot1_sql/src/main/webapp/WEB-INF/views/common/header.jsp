@@ -53,6 +53,10 @@ var KendoItem = function(obj, grid,url, keyStr){
 		        xhr.setRequestHeader("Content-Type", "application/json");
 		    },
 		    success : function(result){
+		    	if(result.error){
+		    		alert(result.error);
+		    		return;
+		    	}
 		    	if(result.key){
 		    		result = result[result.key];
 		    	}

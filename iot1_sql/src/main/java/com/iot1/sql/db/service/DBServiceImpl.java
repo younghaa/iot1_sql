@@ -2,6 +2,7 @@ package com.iot1.sql.db.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -44,6 +45,12 @@ public class DBServiceImpl implements DBService{
 		// TODO Auto-generated method stub
 		return dDao.selectTableInfo(table);
 				}
+
+	@Override
+	public Map<String, Object> runSql(Map<String, String> pm) throws Exception {
+		// TODO Auto-generated method stub
+		return dDao.runSql(pm);
+	}
 
 
 }

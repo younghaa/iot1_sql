@@ -2,18 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
 
 <mapper namespace="vendor">
-	<select id="SELECT_VENDOR" parameterType="vendor" resultType="vendor">
-		select vinum, viname, videsc, viaddress, viphone, vicredat, vicretim
+<select id = "SELECT_VENDOR_COMBO" parameterType="vendorr" resultType="vendorr">
+	select vinum, viname
+	from vendor_info
+</select>
+	<select id="SELECT_VENDOR" parameterType="vendorr" resultType="vendorr">
+		select viNum, viName, viDesc, viAddress, viPhone, viCredat, viCretim
 		from vendor_info
 		where 1=1
 		<if test="viNum!=0">
 			and vinum = #{viNum}
 		</if>
 	</select>
+	<insert id="INSERT_VENDOR" parameterType="vendorr">
+	INSERT INTO VENDOR_INFO(viName, viDesc, viAddress, viPhone, viCredat, viCretim)
+	values(#{viName},#{viDesc},#{viAddress},#{viPhone},DATE_FORMAT(NOW(),'%Y-%m-%d'),DATE_FORMAT(NOW(),'%H:%i:%s'))
+	</insert>
+	
+	<delete id="DELETE_VENDOR" parameterType="vendorr">
+	DELETE FROM VENDOR_INFO
+	WHERE vinum = #{viNum}
+	</delete>
+	
+	<update id="UPDATE_VENDOR" parameterType="vendorr">
+	update vendor_info
+	set 
+	viname=#{viName},
+	viDesc=#{viDesc},
+	viAddress=#{viAddress},
+	viPhone=#{viPhone}
+	where vinum =#{viNum}
+	</update>
 </mapper>
-
-
-
-
 
 

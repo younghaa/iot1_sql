@@ -108,11 +108,11 @@ function toolbarEvent(e){
 <c:import url="${menuUrl}"/> 
 <kendo:splitter name="vertical" orientation="vertical">
     <kendo:splitter-panes>
-        <kendo:splitter-pane id="top-pane" collapsible="false">
+        <kendo:splitter-pane id="top-pane" collapsible="false" >
             <kendo:splitter-pane-content>
                 <kendo:splitter name="horizontal" style="height: 100%; width: 100%;">
 				    <kendo:splitter-panes>
-				        <kendo:splitter-pane id="left-pane" collapsible="true" size="220px">
+				        <kendo:splitter-pane id="left-pane" collapsible="true" size="300px">
 				            <kendo:splitter-pane-content >
 				                <div class="pane-content">
 				                	<c:import url="${dbTreeJsp}"/>
@@ -125,7 +125,7 @@ function toolbarEvent(e){
 				   					<kendo:splitter-panes>
 		       							<kendo:splitter-pane id="top-pane" collapsible="false" >
 							                <div class="pane-content">
-						                		<c:import url="${tabJsp }"/>
+						                		<c:import url="${tabJsp}"/>
 			                                </div>
 		       							</kendo:splitter-pane>
 		       							<kendo:splitter-pane id="middle-pane" collapsible="true" >
