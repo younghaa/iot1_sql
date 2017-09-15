@@ -13,34 +13,100 @@
 var treeview;
 
 function onBound(){
-	treeview = $('#treeview').data('kendoTreeView');
+	if(!treeview){
+		treeview = $('#treeview').data('kendoTreeView');	
+	}
+}
+function test(a){
+	alert(a);
+}
+$(document).ready(function(){
+	
+	var cnt = 0;
 	$( "#query" ).keydown(function(e) {
 		var keyCode = e.keyCode || e.which;
-		if(e.ctrlKey && keyCode==120 && e.shiftKey){
-			var sql = this.value;
-			var cursor = this.selectionStart;
-			var startSql = sql.substr(0,cursor);
-			var startSap = startSql.lastIndexOf(";")
-			startSql = startSql.substr(startSap+1);
-			var endSql = sql.substr(cursor);
-			var endSap = endSql.indexOf(";");
-			if(endSap==-1) {
-				endSap=sql.length;
-			}
-			endSql = endSql.substr(0,endSap);
-			sql = startSql + endSql;
-			alert(sql);
-			alert(this.selectionStart);
-		}else if(e.ctrlKey && keyCode==120){
-			var t = this.value.substr(this.selectionStart, this.selectionEnd - this.selectionStart);
-			alert(t);
-		}else if(keyCode==120){
-			
-		}
-		
-	});
-}
+		if(keyCode==120){
+			cnt++;
+			console.log(cnt);
+			var sql;
+			var sqls;
+			if(e.ctrlKey && keyCode==120 && e.shiftKey){
+				sql = this.value;
+				var cursor = this.selectionStart;
+				var startSql = sql.substr(0,cursor);
+				var startSap = startSql.lastIndexOf(";")
+				
+					startSql = startSql.substr(startSap+1);
+						var endSql = sql.substr(cursor);
+						var endSap = endSql.indexOf(";");
+						if(endSap==-1) {
+							endSap=sql.length;
+						}
+						endSql = endSql.substr(0,endSap);
+						sql = startSql + endSql;
+						kendoConsole.log("실행한 쿼리 : " + sql);
+						
+			}else if(e.ctrlKey && keyCode==120){
+				sql = this.value.substr(this.selectionStart, this.selectionEnd - this.selectionStart);
 
+				kendoConsole.log("실행한 쿼리 : " + sql);
+				
+			}else if(keyCode==120){
+				sql = this.value;
+				var startSql = sql.substr(0);
+				var startSap = startSql.lastIndexOf(";")
+				
+					startSql = startSql.substr(startSap+1);
+						var endSql = sql.substr(cursor);
+						var endSap = endSql.indexOf(";");
+						if(endSap==-1) {
+							endSap=sql.length;
+						}
+						endSql = endSql.substr(0,endSap);
+						sql = startSql + endSql;
+				kendoConsole.log("실행한 쿼리 : " + this.value);
+			}
+			
+			if(sql){
+				sql = sql.trim();
+				sqls = sql.split(";");
+				if(sqls.length==1){
+					var au = new AjaxUtil("db/run/sql");
+					var param = {};
+					param["sql"] = sql;
+					au.param = JSON.stringify(param);
+					au.setCallbackSuccess(callbackSql);
+					au.send();
+					return;
+				}else if(sqls){				
+					return;
+				}
+			}	
+		}
+	});
+})
+function callbackSql(result){
+	var key = result.key;
+	var obj = result[key];
+	var gridData = obj.list;
+	
+	try{
+		$('#resultGrid').kendoGrid('destroy').empty();
+	}catch(e){
+		
+	}
+	var gridParam = {
+	  		dataSource: {
+	    	      data: gridData,
+	    	      pageSize: 5
+	    	    },
+	    	    editable: false,
+	    	    sortable: true,
+	    	    pageable:true	    
+	  	}
+  	var grid = $("#resultGrid").kendoGrid(gridParam);
+	}
+	
 function treeSelect(){
 	window.selectedNode = treeview.select();
 	var data = treeview.dataItem(window.selectedNode);
@@ -56,6 +122,7 @@ function treeSelect(){
 		ki.send();
 	}
 }
+
 
 function callbackForTreeItem2(result){
 	if(result.error){
@@ -105,14 +172,14 @@ function toolbarEvent(e){
 }
 </script>
 <body>
-<c:import url="${menuUrl}"/> 
+<%@ include file = "/WEB-INF/views/common/top_menu.jsp" %>
 <kendo:splitter name="vertical" orientation="vertical">
     <kendo:splitter-panes>
         <kendo:splitter-pane id="top-pane" collapsible="false" >
             <kendo:splitter-pane-content>
-                <kendo:splitter name="horizontal" style="height: 100%; width: 100%;">
+                <kendo:splitter name="horizontal" style="height: 100%; width: 100%;" click="click">
 				    <kendo:splitter-panes>
-				        <kendo:splitter-pane id="left-pane" collapsible="true" size="300px">
+				        <kendo:splitter-pane id="left-pane" collapsible="true" size="220px">
 				            <kendo:splitter-pane-content >
 				                <div class="pane-content">
 				                	<c:import url="${dbTreeJsp}"/>
@@ -130,7 +197,7 @@ function toolbarEvent(e){
 		       							</kendo:splitter-pane>
 		       							<kendo:splitter-pane id="middle-pane" collapsible="true" >
 							                <div class="pane-content">
-						                		<c:import url="${tableInfoJsp}"/>
+						                		<div id="resultGrid" style="width:100%;"></div>
 			                                </div>
 		       							</kendo:splitter-pane>
 	       							</kendo:splitter-panes>
@@ -144,9 +211,9 @@ function toolbarEvent(e){
         <kendo:splitter-pane id="middle-pane" collapsible="false" size="100px">
             <kendo:splitter-pane-content>
                 <div class="pane-content">
-	                <h3>Outer splitter / middle pane</h3>
-	                <p>Resizable only.</p>
+   					 <div class="console"></div>
                 </div>
+
             </kendo:splitter-pane-content>
         </kendo:splitter-pane>
         <kendo:splitter-pane id="bottom-pane" collapsible="false" resizable="false" size="20px" scrollable="false">

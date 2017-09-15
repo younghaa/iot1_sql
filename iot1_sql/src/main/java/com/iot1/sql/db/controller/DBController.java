@@ -70,4 +70,8 @@ public class DBController {
 		}
 		return map;
 	}
+	@RequestMapping(value = {"/db/run/console"}, method = RequestMethod.GET)
+    public String index() {
+        return "maskedtextbox/db/run/console";
+    }
 }

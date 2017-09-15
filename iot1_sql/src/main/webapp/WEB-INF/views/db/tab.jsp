@@ -28,7 +28,7 @@
 		<kendo:tabStrip-item text="쿼리">
 			<kendo:tabStrip-item-content>
 				<div class="weather">
-					<textarea id="query"></textarea>
+ 				<textarea id="query" style="width:1000px"></textarea>
 				</div>
 			</kendo:tabStrip-item-content>
 		</kendo:tabStrip-item>
@@ -54,7 +54,7 @@
 #tabstrip h2 {
 	font-weight: lighter;
 	font-size: 5em;
-	line-height: 1;
+	line-height: 3;
 	padding: 0 0 0 30px;
 	margin: 0;
 }
