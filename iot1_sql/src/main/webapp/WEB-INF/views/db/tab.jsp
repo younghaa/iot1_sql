@@ -10,7 +10,7 @@
 			<kendo:tabStrip-item-content>
 				<div class="weather">
 					<kendo:grid title="테이블정보" name="tableInfoGrid" sortable="true"
-					pageable="false" navigatable="true">
+					scrollable="true" pageable="false" navigatable="true">
 						<kendo:grid-excel fileName="테이블정보.xlsx" allPages="true"
 							filterable="true" proxyURL="${eUrl}" />
 						<kendo:grid-columns>
@@ -20,7 +20,6 @@
 							<kendo:grid-column title="널허용여부" field="isNullable">
 							</kendo:grid-column>
 						</kendo:grid-columns>
-						
 					</kendo:grid>
 				</div>
 			</kendo:tabStrip-item-content>
@@ -28,7 +27,13 @@
 		<kendo:tabStrip-item text="쿼리">
 			<kendo:tabStrip-item-content>
 				<div class="weather">
- 				<textarea id="query" style="width:1000px"></textarea>
+					<kendo:toolBar name="queryToolBar">
+						<kendo:toolBar-items>
+							<kendo:toolBar-item type="button" text="실행" id="btnRun" click="toolbarEvent"/>
+                            <kendo:toolBar-item type="button" text="Clear" id="clear" click="clear"/>
+						</kendo:toolBar-items>
+					</kendo:toolBar>
+ 				<textarea id="query"></textarea>
 				</div>
 			</kendo:tabStrip-item-content>
 		</kendo:tabStrip-item>
@@ -47,14 +52,14 @@
 }
 
 .weather {
-	margin: 0 auto 30px;
+	margin: 0 0 0 0;
 	text-align: center;
 }
 
 #tabstrip h2 {
 	font-weight: lighter;
 	font-size: 5em;
-	line-height: 3;
+	line-height: 1;
 	padding: 0 0 0 30px;
 	margin: 0;
 }

@@ -17,4 +17,5 @@ public interface DBDao {
 	public List<Table> selectTableList(DataBase di) throws Exception;
 	public List<Column> selectTableInfo(Table table) throws Exception;
 	public Map<String,Object> runSql(Map<String, String>pm) throws Exception;
+	public Map<String,Object> runSqls(Map<String, List>pm) throws Exception;
 }

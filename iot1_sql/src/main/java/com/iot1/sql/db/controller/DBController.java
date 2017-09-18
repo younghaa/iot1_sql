@@ -70,6 +70,16 @@ public class DBController {
 		}
 		return map;
 	}
+	@RequestMapping(value="/db/run/sqls",method=RequestMethod.POST)
+	public @ResponseBody ModelMap getSqlResult2(@RequestBody Map<String, List> pm, ModelMap map){
+		try{
+			map.put("resultMap2", ds.runSqls(pm));
+			map.put("key", "resultMap2");
+		}catch(Exception e){
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
 	@RequestMapping(value = {"/db/run/console"}, method = RequestMethod.GET)
     public String index() {
         return "maskedtextbox/db/run/console";
