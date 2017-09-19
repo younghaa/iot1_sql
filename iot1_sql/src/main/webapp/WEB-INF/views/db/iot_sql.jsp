@@ -5,6 +5,7 @@
 <c:set var="dbTreeJsp" value="/WEB-INF/views/db/db_treeview.jsp" />
 <c:set var="tableInfoJsp" value="/WEB-INF/views/db/table_info.jsp" />
 <c:set var="tabJsp" value="/WEB-INF/views/db/tab.jsp" />
+<c:set var="tab2Jsp" value="/WEB-INF/views/db/tab2.jsp" />
 <c:url var="tableInfoUrl" value="/db/table/info" />
 
 <title>IOT SQL</title>
@@ -33,7 +34,7 @@ $(document).ready(function(){
 			if(e.ctrlKey && keyCode==120 && e.shiftKey){
 				sql = this.value;
 				var cursor = this.selectionStart;
-				var startSql = sql.substr(0,cursor);
+				var startSql = sql.substr(0,cursor);	
 				var startSap = startSql.lastIndexOf(";")
 				
 					startSql = startSql.substr(startSap+1);
@@ -52,23 +53,14 @@ $(document).ready(function(){
 				kendoConsole.log("실행한 쿼리 : " + sql);
 				
 			}else if(keyCode==120){
-				sql = this.value;
-				var startSql =sql.substr(0);
-				var startSap = startSql.lastIndexOf(";")
-				startSql = endSql.substr(startSap+1);
-				var endSql = sql.substr();
-				var endSap = end.Sql.indexOf(";");
-				if(endSap=-1){
-					endSap=sql.length;
-				}
-				endSql = endSql.substr(0,endSap);
-				sql = startSql +endSql;
+				sql = this.value;	
 				kendoConsole.log("실행한 쿼리 : " + this.value);
 			}
 			
 			if(sql){
 				sql = sql.trim();
 				sqls = sql.split(";");
+				sqls = sqls.filter(function(e){return e});
 				if(sqls.length==1){
 					var au = new AjaxUtil("db/run/sql");
 					var param = {};
@@ -79,9 +71,9 @@ $(document).ready(function(){
 					return;
 				}else if(sqls.length>1){
 					var au = AjaxUtil("db/run/sqls");
-					var param = {};
-					param["sql"] = sql;
-					au.param = JSON.stringify(param);
+					var params = {};
+					params["sql"] = sqls;
+					au.params = JSON.stringify(params);
 					au.setCallbackSuccess(callbackSql);
 					au.send();
 					return;
@@ -91,10 +83,20 @@ $(document).ready(function(){
 	});
 })
 function callbackSql(result){
+	var state=result.state;
+	if(result.error){
+		alert(result.error);
+		$("#stateLog").append(result.error);
+		$("#stateLog").append("<br/>");
+		$("#stateLog").append(state);
+		$("#stateLog").append("<br/>");
+		return;
+	}
 	var key = result.key;
 	var obj = result[key];
 	var gridData = obj.list;
-	
+	var sql = obj.sql;
+	var sqls = obj.sqls;
 	try{
 		$('#resultGrid').kendoGrid('destroy').empty();
 	}catch(e){
@@ -155,6 +157,7 @@ function callbackForTreeItem(result){
 	}
 	$("#btnConnect").text("접속해제");
 }
+	
 function toolbarEvent(e){
 	if($("#btnConnect").text()=="접속해제"){
 		treeview.dataSource.read();
@@ -208,7 +211,9 @@ function changeMiddlePane(e){
 		       							</kendo:splitter-pane>
 		       							<kendo:splitter-pane id="middle-pane" collapsible="true" >
 							                <div class="pane-content">
-						                		<div id="resultGrid"></div>
+						                		<div id="resultGrid">
+						                		<c:import url="${tab2Jsp}"/>
+						                		</div>
 			                                </div>
 		       							</kendo:splitter-pane>
 	       							</kendo:splitter-panes>
@@ -222,7 +227,7 @@ function changeMiddlePane(e){
         <kendo:splitter-pane id="middle-pane" collapsible="false" size="100px">
             <kendo:splitter-pane-content>
                 <div class="pane-content">
-   					 <div class="console" scrollable="true"></div>
+   					 <div class="console"></div>
                 </div>
 
             </kendo:splitter-pane-content>

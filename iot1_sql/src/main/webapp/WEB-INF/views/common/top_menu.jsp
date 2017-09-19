@@ -9,12 +9,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="${rootPath}/main.jsp">HOME</a>
+          <a class="navbar-brand" href="${rootPath}/sql/url/db:iot_sql">HOME</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/board/board_select.jsp">게시판가기</a></li>
-            <li><a href="/user/user_info.jsp">유저정보가기</a></li>
+            <li><a href="/sql/url/goods:multi_list">게시판가기</a></li>
+            <li><a href="/sql/url/user:user_list">유저정보가기</a></li>
             <li><a href="/role/role_select.jsp">권한정보가기</a></li>
             <li><a href="/user/logout">로그아웃</a></li>
           </ul>

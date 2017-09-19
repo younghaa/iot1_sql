@@ -30,7 +30,6 @@
 					<kendo:toolBar name="queryToolBar">
 						<kendo:toolBar-items>
 							<kendo:toolBar-item type="button" text="실행" id="btnRun" click="toolbarEvent"/>
-                            <kendo:toolBar-item type="button" text="Clear" id="clear" click="clear"/>
 						</kendo:toolBar-items>
 					</kendo:toolBar>
  				<textarea id="query"></textarea>
