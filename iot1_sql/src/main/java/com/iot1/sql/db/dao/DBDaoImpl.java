@@ -114,6 +114,7 @@ public class DBDaoImpl extends SqlSessionDaoSupport implements DBDao{
 	               String columnName = metadata.getColumnName(i);
 	               columns.add(columnName);
 	            }
+	            
 	            List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 	            while(resultSet.next()){
 	               Map<String,String> hm = new HashMap<String,String>();

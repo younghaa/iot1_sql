@@ -212,7 +212,7 @@ function changeMiddlePane(e){
 		       							<kendo:splitter-pane id="middle-pane" collapsible="true" >
 							                <div class="pane-content">
 						                		<div id="resultGrid">
-						                		<c:import url="${tab2Jsp}"/>
+<%-- 						                		<c:import url="${tab2Jsp}"/> --%>
 						                		</div>
 			                                </div>
 		       							</kendo:splitter-pane>

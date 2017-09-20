@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="This KendoMediaPlayer example demonstrates the basic functionality of the widget. With jQuery-based MediaPlayer widget in Kendo UI, you can add media content to your web site">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>jQuery MediaPlayer control example | KendoMediaPlayer Demo</title>
+    <title>KendoMediaPlayer Demo</title>
     <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet'>
     <link rel="shortcut icon" href="/jsp-ui/favicon.ico"/>
     <link rel="canonical" href="http://demos.telerik.com/jsp-ui/mediaplayer/index" />
